@@ -11,3 +11,11 @@ List<int> snakePos = [
 
 // food position
 int foodPos = 55;
+
+// snake direction
+enum snake_Direction {
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+}
