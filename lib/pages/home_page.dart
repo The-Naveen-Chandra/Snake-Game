@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:snake_game/components/variables.dart';
+import 'package:snake_game/components/components.dart';
+import 'package:snake_game/components/food_pixel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,22 +30,30 @@ class _HomePageState extends State<HomePage> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: rowSize),
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                );
+                if (snakePos.contains(index)) {
+                  return SnakePixel();
+                } else if (foodPos == index) {
+                  return FoodPixel();
+                } else {
+                  return BlankPixel();
+                }
               },
             ),
           ),
 
           // play button
           Expanded(
-            child: Container(),
+            child: Container(
+              child: Center(
+                child: MaterialButton(
+                  onPressed: () {},
+                  child: Text(
+                    "PLAY",
+                  ),
+                  color: Colors.pink,
+                ),
+              ),
+            ),
           ),
         ],
       ),
