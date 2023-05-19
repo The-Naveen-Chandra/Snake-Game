@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/components.dart';
@@ -17,11 +18,83 @@ class _HomePageState extends State<HomePage> {
 
   // start the game
   void startGame() {
+    gameHasStarted = true;
     Timer.periodic(const Duration(milliseconds: 200), (timer) {
       setState(() {
+        // keep the snake moving
         moveSnake();
+
+        // check if the game is over
+        if (gameOver()) {
+          timer.cancel();
+
+          // display a message to the user
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("GAME OVER"),
+                content: Column(
+                  children: [
+                    Text(
+                      "Your score is: $currentScore",
+                    ),
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: "Enter name",
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  MaterialButton(
+                    onPressed: () {
+                      submitScore;
+                      Navigator.pop(context);
+                      newGame();
+                    },
+                    color: Colors.pink,
+                    child: const Text(
+                      "Submit",
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       });
     });
+  }
+
+  // submit score
+  void submitScore() {
+    // add data to firebase
+  }
+
+  // start the new game
+  void newGame() {
+    setState(() {
+      snakePos = [
+        0,
+        1,
+        2,
+      ];
+      foodPos = 55;
+      currentDirection = snake_Direction.RIGHT;
+      gameHasStarted = false;
+      currentScore = 0;
+    });
+  }
+
+  // snake eating function
+  void eatFood() {
+    currentScore++;
+    // making sure the new food is not where the snake is
+    while (snakePos.contains(foodPos)) {
+      foodPos = Random().nextInt(totalNumberOfSquares);
+    }
   }
 
   void moveSnake() {
@@ -35,9 +108,6 @@ class _HomePageState extends State<HomePage> {
             //* add a head to the snake
             snakePos.add(snakePos.last + 1);
           }
-
-          //* remove the tail of the snake
-          snakePos.removeAt(0);
         }
         break;
       case snake_Direction.LEFT:
@@ -49,31 +119,52 @@ class _HomePageState extends State<HomePage> {
             //* add a head to the snake
             snakePos.add(snakePos.last - 1);
           }
-
-          //* remove the tail of the snake
-          snakePos.removeAt(0);
         }
         break;
       case snake_Direction.UP:
         {
           //* add a head to the snake
-          snakePos.add(snakePos.last - rowSize);
-
-          //* remove the tail of the snake
-          snakePos.removeAt(0);
+          if (snakePos.last < rowSize) {
+            snakePos.add(snakePos.last - rowSize + totalNumberOfSquares);
+          } else {
+            snakePos.add(snakePos.last - rowSize);
+          }
         }
         break;
       case snake_Direction.DOWN:
         {
           //* add a head to the snake
-          snakePos.add(snakePos.last + rowSize);
-
-          //* remove the tail of the snake
-          snakePos.removeAt(0);
+          if (snakePos.last + rowSize > totalNumberOfSquares) {
+            snakePos.add(snakePos.last + rowSize - totalNumberOfSquares);
+          } else {
+            snakePos.add(snakePos.last + rowSize);
+          }
         }
         break;
       default:
     }
+
+    // snake is eating food
+    if (snakePos.last == foodPos) {
+      eatFood();
+    } else {
+      //* remove the tail of the snake
+      snakePos.removeAt(0);
+    }
+  }
+
+  // game over
+  bool gameOver() {
+    // the game is over when the snake runs into itself
+    // this occurs when the there is a duplicate position in the snakePos list
+
+    // this list is body of the snake (no head)
+    List<int> bodySnake = snakePos.sublist(0, snakePos.length - 1);
+
+    if (bodySnake.contains(snakePos.last)) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -84,7 +175,31 @@ class _HomePageState extends State<HomePage> {
         children: [
           // high score
           Expanded(
-            child: Container(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // user current score
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Current Score",
+                    ),
+                    Text(
+                      currentScore.toString(),
+                      style: const TextStyle(
+                        fontSize: 36,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // High Scores, top 5
+                const Text(
+                  "High Scores...",
+                ),
+              ],
+            ),
           ),
 
           // game grid
@@ -126,11 +241,11 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: rowSize),
                 itemBuilder: (context, index) {
                   if (snakePos.contains(index)) {
-                    return SnakePixel();
+                    return const SnakePixel();
                   } else if (foodPos == index) {
-                    return FoodPixel();
+                    return const FoodPixel();
                   } else {
-                    return BlankPixel();
+                    return const BlankPixel();
                   }
                 },
               ),
@@ -142,11 +257,11 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               child: Center(
                 child: MaterialButton(
-                  onPressed: startGame,
+                  onPressed: gameHasStarted ? () {} : startGame,
                   child: Text(
                     "PLAY",
                   ),
-                  color: Colors.pink,
+                  color: gameHasStarted ? Colors.grey : Colors.pink,
                 ),
               ),
             ),

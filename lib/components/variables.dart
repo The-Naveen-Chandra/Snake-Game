@@ -12,6 +12,12 @@ List<int> snakePos = [
 // food position
 int foodPos = 55;
 
+// user score
+int currentScore = 0;
+
+// game has started bool
+bool gameHasStarted = false;
+
 // snake direction
 enum snake_Direction {
   UP,
