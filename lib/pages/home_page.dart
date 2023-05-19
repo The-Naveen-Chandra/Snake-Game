@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:snake_game/components/components.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,11 +34,15 @@ class _HomePageState extends State<HomePage> {
             barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
-                title: const Text("GAME OVER"),
+                title: const Center(
+                  child: Text(
+                    "GAME OVER",
+                  ),
+                ),
                 content: Column(
                   children: [
                     Text(
-                      "Your score is: $currentScore",
+                      "Your Score is: $currentScore",
                     ),
                     const TextField(
                       decoration: InputDecoration(
@@ -47,15 +52,33 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 actions: [
-                  MaterialButton(
-                    onPressed: () {
-                      submitScore;
-                      Navigator.pop(context);
-                      newGame();
-                    },
-                    color: Colors.pink,
-                    child: const Text(
-                      "Submit",
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        submitScore;
+                        Navigator.pop(context);
+                        newGame();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: const MaterialStatePropertyAll<Color>(
+                          Colors.pink,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        ),
+                      ),
+                      // color: Colors.pink,
+                      child: Text(
+                        "Submit",
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -181,8 +204,9 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       "Current Score",
+                      style: GoogleFonts.robotoMono(),
                     ),
                     Text(
                       currentScore.toString(),
@@ -194,8 +218,9 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // High Scores, top 5
-                const Text(
+                Text(
                   "High Scores...",
+                  style: GoogleFonts.robotoMono(),
                 ),
               ],
             ),
@@ -242,9 +267,9 @@ class _HomePageState extends State<HomePage> {
                   if (snakePos.contains(index)) {
                     if (snakePos.last == index) {
                       return const HeadSnakePixel();
-                    } else if(snakePos.first == index) {
+                    } else if (snakePos.first == index) {
                       return const TailSnakePixel();
-                    } else  {
+                    } else {
                       return const SnakePixel();
                     }
                   } else if (foodPos == index) {
@@ -261,11 +286,29 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Container(
               child: Center(
-                child: MaterialButton(
+                child: TextButton(
                   onPressed: gameHasStarted ? () {} : startGame,
-                  color: gameHasStarted ? Colors.grey : Colors.pink,
-                  child: const Text(
-                    "PLAY",
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(
+                      gameHasStarted ? Colors.grey : Colors.pink,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                  ),
+                  // color: Colors.pink,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      "Play",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
