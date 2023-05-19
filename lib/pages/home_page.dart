@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/components.dart';
-import 'package:snake_game/components/food_pixel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -241,7 +240,13 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: rowSize),
                 itemBuilder: (context, index) {
                   if (snakePos.contains(index)) {
-                    return const SnakePixel();
+                    if (snakePos.last == index) {
+                      return const HeadSnakePixel();
+                    } else if(snakePos.first == index) {
+                      return const TailSnakePixel();
+                    } else  {
+                      return const SnakePixel();
+                    }
                   } else if (foodPos == index) {
                     return const FoodPixel();
                   } else {
@@ -258,10 +263,10 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: MaterialButton(
                   onPressed: gameHasStarted ? () {} : startGame,
-                  child: Text(
+                  color: gameHasStarted ? Colors.grey : Colors.pink,
+                  child: const Text(
                     "PLAY",
                   ),
-                  color: gameHasStarted ? Colors.grey : Colors.pink,
                 ),
               ),
             ),

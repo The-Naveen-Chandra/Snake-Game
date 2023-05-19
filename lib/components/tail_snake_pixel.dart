@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FoodPixel extends StatelessWidget {
-  const FoodPixel({super.key});
+class TailSnakePixel extends StatelessWidget {
+  const TailSnakePixel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,11 +9,8 @@ class FoodPixel extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.greenAccent,
+          color: Colors.redAccent,
           borderRadius: BorderRadius.circular(4),
-        ),
-        child: Image.asset(
-          "assets/food-apple.png",
         ),
       ),
     );
