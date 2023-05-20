@@ -37,6 +37,9 @@ class _HomePageState extends State<HomePage> {
                 title: const Center(
                   child: Text(
                     "GAME OVER",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 content: Column(
@@ -52,34 +55,64 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 actions: [
-                  Center(
-                    child: TextButton(
-                      onPressed: () {
-                        submitScore;
-                        Navigator.pop(context);
-                        newGame();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: const MaterialStatePropertyAll<Color>(
-                          Colors.pink,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          newGame();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(
+                            Colors.grey.shade900,
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
                         ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24.0),
+                        // color: Colors.pink,
+                        child: Text(
+                          "Try Again",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      // color: Colors.pink,
-                      child: Text(
-                        "Submit",
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
+                      TextButton(
+                        onPressed: () {
+                          submitScore;
+                          Navigator.pop(context);
+                          newGame();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              const MaterialStatePropertyAll<Color>(
+                            Colors.pink,
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                        ),
+                        // color: Colors.pink,
+                        child: Text(
+                          "Submit",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               );
