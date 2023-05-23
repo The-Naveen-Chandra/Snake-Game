@@ -26,7 +26,7 @@ class HighScoreTile extends StatelessWidget {
               Text(
                 data["score"].toString(),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text(
@@ -35,7 +35,7 @@ class HighScoreTile extends StatelessWidget {
             ],
           );
         } else {
-          return Text(
+          return const Text(
             "Loading...",
           );
         }
