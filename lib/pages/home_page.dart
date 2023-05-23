@@ -32,8 +32,8 @@ class _HomePageState extends State<HomePage> {
 
   Future getDocId() async {
     await FirebaseFirestore.instance
-        .collection("highscores")
-        .orderBy("score", descending: true)
+        .collection('highscores')
+        .orderBy('score', descending: true)
         .limit(10)
         .get()
         .then((value) => value.docs.forEach((element) {
@@ -155,16 +155,18 @@ class _HomePageState extends State<HomePage> {
     var database = FirebaseFirestore.instance;
 
     // add data to firebase
-    database.collection("highscores").add({
-      "name": _nameController.text,
-      "score": currentScore,
+    database.collection('highscores').add({
+      'name': _nameController.text,
+      'score': currentScore,
     });
 
     // add data to firebase
   }
 
   // start the new game
-  void newGame() {
+  Future newGame() async {
+    highScore_DocIds = [];
+    await getDocId();
     setState(() {
       snakePos = [
         0,
@@ -275,35 +277,43 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // user current score
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Current Score",
-                          style: GoogleFonts.robotoMono(),
-                        ),
-                        Text(
-                          currentScore.toString(),
-                          style: const TextStyle(
-                            fontSize: 36,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Current Score",
+                            style: GoogleFonts.robotoMono(),
                           ),
-                        ),
-                      ],
+                          Text(
+                            currentScore.toString(),
+                            style: const TextStyle(
+                              fontSize: 36,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     // High Scores, top 5
                     Expanded(
-                      child: FutureBuilder(
-                        future: letsGetDocIds,
-                        builder: (context, snapshot) {
-                          return ListView.builder(
-                            itemCount: highScore_DocIds.length,
-                            itemBuilder: ((context, index) {
-                              return Text(highScore_DocIds[index]);
-                            }),
-                          );
-                        },
-                      ),
+                      child: gameHasStarted
+                          ? Container()
+                          : Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: FutureBuilder(
+                                future: letsGetDocIds,
+                                builder: (context, snapshot) {
+                                  return ListView.builder(
+                                    itemCount: highScore_DocIds.length,
+                                    itemBuilder: ((context, index) {
+                                      return HighScoreTile(
+                                          documentId: highScore_DocIds[index]);
+                                    }),
+                                  );
+                                },
+                              ),
+                          ),
                     )
                   ],
                 ),
