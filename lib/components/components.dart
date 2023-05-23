@@ -4,3 +4,4 @@ export './snake_pixel.dart';
 export './food_pixel.dart';
 export './head_snake_pixel.dart';
 export './tail_snake_pixel.dart';
+export './highscore_tile.dart';
